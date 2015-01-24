@@ -4,7 +4,8 @@
   "description": "Immutable Model and Collection abstractions backed by Immutable.js",
   "main": "index.js",
   "scripts": {
-    "test": "6to5-node test/test"
+    "test": "6to5-node test/test",
+    "debug": "6to5-node debug test/test"
   },
   "author": "Leonardo Andres Garcia Crespo <leoasis@gmail.com>",
   "url": "https://github.com/leoasis/immutable-model",

@@ -1,16 +1,23 @@
 import Immutable from 'immutable'
 
-export default class Collection {
+export default class Collection extends Immutable.Collection.Keyed {
   constructor(values) {
     var byId = {};
     values = values || [];
-    var modelsByCid = Immutable.OrderedMap(values.reduce(function(acc, model) {
-      acc[model.cid] = model;
-      byId[model.id] = model.cid;
+    var modelsByCid = Immutable.OrderedMap(values.reduce(function(acc, model, cid) {
+      cid = (model.get && model.get('cid')) || cid;
+      var id = model.get && model.get('id');
+      acc[cid] = model;
+      byId[id] = cid;
+      return acc;
     }, {}));
     byId = Immutable.Map(byId);
 
     return makeCollection(modelsByCid, byId);
+  }
+
+  toString() {
+    return this.__toString('Collection {', '}');
   }
 
   set(model) {
@@ -33,9 +40,12 @@ export default class Collection {
     }
   }
 
+  __iterate(fn, reverse) {
+    return this._modelsByCid.__iterate(fn, reverse);
+  }
 
-  map() {
-    return this._modelsByCid.map.apply(this._modelsByCid, arguments);
+  __iterator(type, reverse) {
+    return this._modelsByCid.__iterator(type, reverse);
   }
 }
 

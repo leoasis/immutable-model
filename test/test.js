@@ -28,10 +28,6 @@ c = c.set(models[0]).set(models[1]).set(models[2]);
 assert.equal(c.size, 3, 'Can get the size');
 assert.equal(c.set(Person({id: 1, cid: 'c4'})).size, 4, 'Can get the size, after update');
 
-assert.deepEqual(c.map(function(model) {
-  return model.get('name');
-}).toArray(), ['Foo', 'Bar', 'Baz'], 'Can map over the models to get the names');
-
 assert.equal(c.get(111), models[1], 'Can get the model by id 111');
 
 assert.equal(c.get('c3'), models[2], 'Can get the model by cid c3');
@@ -49,4 +45,14 @@ assert.equal(c.remove('c2').size, 2, 'Can remove models by cid');
 assert.equal(c.remove('c2').get('c2'), undefined, 'Model is actually removed');
 
 assert.equal(c.remove('notExists'), c, 'Removing something that does not exist does nothing');
+
+var mappedC = c.map(function(model) {
+  return model.get('name');
+});
+
+assert.deepEqual(mappedC.toArray(), ['Foo', 'Bar', 'Baz'], 'Can map over the models to get the names');
+
+assert.equal(mappedC.get('c1'), 'Foo', 'Can get element by cid from mapped collection');
+assert.equal(mappedC.get(323), 'Foo', 'Can get element by id from mapped collection');
+
 console.log('All tests ok!');
